@@ -1,8 +1,8 @@
 // crio as variaveis
 var trex,trexRun,trexCollide
 var ground,groundImage,invisibleGround
-var cloud,cloudImage
-var cactu1,cactu2,cactu3,cactu4,cactu5,cactu6,cactus
+var cloudImage
+var cactu1,cactu2,cactu3,cactu4,cactu5,cactu6
 var points = 0
 var cactuGroup
 var cloudGroup
@@ -10,6 +10,7 @@ var gameState = 'gameplay'
 var gameover,gameoverImage
 var restart,restartImage
 var jump,checkPoint,die
+var screenWidth = window.innerWidth 
 
 function reset () {
 console.log ("queroreiniciaaaaaaaaaaaaaar")
@@ -32,11 +33,11 @@ gameState = "gameplay"
 
 function drawClouds () {
     if (frameCount%100 === 0 ) {
-        cloud = createSprite (700,50,50,10)
+        var cloud = createSprite (screenWidth+100,50,50,10)
         cloud.addImage (cloudImage)
         cloud.velocityX = -3
         cloud.y = Math.round(random(10,100))
-        cloud.lifetime = 250
+        cloud.lifetime = screenWidth
         cloudGroup.add (cloud)
 
         trex.depth = cloud.depth
@@ -49,9 +50,9 @@ function drawClouds () {
 
 function drawCactus () {
     if (frameCount%200 === 0) {
-        cactus = createSprite (700,165,30,50)
+        var cactus = createSprite (screenWidth+100,165,30,50)
         cactus.velocityX = - (4+points/120)
-        cactus.lifetime = 500
+        cactus.lifetime = screenWidth
         cactus.scale = 0.8
         var type = Math.round(random(1,6))
         switch (type) {
@@ -74,7 +75,10 @@ function drawCactus () {
         }
 
         cactuGroup.add (cactus)
+        console.log (type)
     }
+
+    
 }     
 
 // serve para precarregar imagens/animacoes/sons
@@ -84,7 +88,7 @@ function preload() {
     restartImage = loadImage ("restart.png")
     gameoverImage = loadImage ("gameOver.png")
 
-    groundImage = loadImage ("ground2.png")
+    groundImage = loadImage ("ground2.png","ground2.png")
     cloudImage = loadImage ("cloud.png")
     cactu1 = loadImage ("obstacle1.png")
     cactu2 = loadImage ("obstacle2.png")
@@ -100,27 +104,27 @@ function preload() {
 
 // serve pra fazer a configuracao inicial (só é executada 1 vez quando o jogo começar)
 function setup() {
-    createCanvas(600, 200)
+    createCanvas(screenWidth, 200)
 
     trex = createSprite (50,160,20,40)
     trex.addAnimation ("joao",trexRun)
     trex.addAnimation ("pedro",trexCollide)
     trex.scale = 0.7
 
-    ground  =  createSprite (300,190,600,20)
+    ground  =  createSprite (screenWidth/2,190,screenWidth,20)
     ground.addImage (groundImage)
 
-    invisibleGround = createSprite (300,200,600,10)
+    invisibleGround = createSprite (screenWidth/2,200,screenWidth,10)
     invisibleGround.visible = false
 
     cactuGroup = new Group ()
     cloudGroup = new Group ()
 
-    restart = createSprite (300,100)
+    restart = createSprite (screenWidth/2,100)
     restart.addImage (restartImage)
     restart.visible = false
 
-    gameover = createSprite (300,50)
+    gameover = createSprite (screenWidth/2,50)
     gameover.addImage (gameoverImage)
     gameover.visible = false
 }
@@ -140,7 +144,7 @@ function draw() {
         ground.velocityX  = - (4+points/120)
 
         if (ground.x < 0) {
-            ground.x =  ground.width/2    
+            ground.x =  ground.width/2
         }
 
         if (trex.isTouching (cactuGroup)) {
@@ -167,7 +171,7 @@ function draw() {
         }
     }
 
-    text ("POINTS: " + points ,400,30) 
+    text ("POINTS: " + points ,screenWidth-200,30) 
     
     trex.collide (invisibleGround)
     trex.velocityY = trex.velocityY + 0.5 
