@@ -136,9 +136,10 @@ function draw() {
     if (gameState === 'gameplay') {
         points = points + Math.round(frameRate()/60 )
 
-        if (keyDown("space") && trex.y > 35 ) {
+        if ((keyDown("space")|| touches.length > 0)&& trex.y > 35 ) {
             trex.velocityY = -5
             jump.play ()
+            touches = []
         }
 
         ground.velocityX  = - (4+points/120)
@@ -166,8 +167,9 @@ function draw() {
         restart.visible =  true
         gameover.visible =  true
 
-        if (mousePressedOver(restart)) {
+        if (mousePressedOver(restart)|| touches.lenght > 0) {
             reset ()
+            touches = []
         }
     }
 
